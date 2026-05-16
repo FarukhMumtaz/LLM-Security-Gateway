@@ -147,7 +147,7 @@ def main() -> None:
 
     st.markdown("---")
     st.caption(
-        "Root `main.py` is the Streamlit entrypoint. Use `gateway_api.py` for the FastAPI backend if needed."
+        "Secure AI Gateway for real-time prompt inspection, jailbreak prevention, and privacy-aware LLM protection powered by modern DevSecOps practices."
     )
 
 
