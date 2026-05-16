@@ -148,29 +148,29 @@ def _detect_composite(text: str, results: List[RecognizerResult]) -> List[Recogn
 
 # ── Build Analyzer Engine ─────────────────────────────────────────────────────
 def _build_analyzer() -> AnalyzerEngine:
-    # BUG FIX: en_core_web_lg is hardcoded — if it's not installed the whole
-    # gateway crashes at import time with a cryptic OSError. Now we try lg first
-    # and fall back to sm, with a clear error message if neither is present.
+    # Try the large model first, then the lightweight spaCy English model.
+    # If neither is installed, attempt to download en_core_web_sm once.
     _PRIMARY_MODEL   = "en_core_web_lg"
     _FALLBACK_MODEL  = "en_core_web_sm"
     import spacy
+
     if spacy.util.is_package(_PRIMARY_MODEL):
         model_name = _PRIMARY_MODEL
-    elif spacy.util.is_package(_FALLBACK_MODEL):
-        import warnings
-        warnings.warn(
-            f"{_PRIMARY_MODEL} not found — falling back to {_FALLBACK_MODEL}. "
-            "NER accuracy may be lower. Install the large model with:\n"
-            f"  python -m spacy download {_PRIMARY_MODEL}",
-            RuntimeWarning,
-            stacklevel=2,
-        )
-        model_name = _FALLBACK_MODEL
     else:
-        raise OSError(
-            f"No spaCy English model found. Install one with:\n"
-            f"  python -m spacy download {_PRIMARY_MODEL}"
-        )
+        if not spacy.util.is_package(_FALLBACK_MODEL):
+            try:
+                from spacy.cli import download
+                download(_FALLBACK_MODEL)
+            except Exception:
+                pass
+
+        if spacy.util.is_package(_FALLBACK_MODEL):
+            model_name = _FALLBACK_MODEL
+        else:
+            raise OSError(
+                "spaCy English model unavailable. "
+                "Presidio PII detection cannot run without en_core_web_sm or en_core_web_lg."
+            )
 
     configuration = {
         "nlp_engine_name": "spacy",
@@ -201,8 +201,10 @@ def _build_analyzer() -> AnalyzerEngine:
 # ── Initialize engines once at import time ───────────────────────────────────
 _analyzer: Optional[AnalyzerEngine] = None
 MODEL_ERROR: Optional[str] = None
+PII_ENABLED: bool = False
 try:
     _analyzer = _build_analyzer()
+    PII_ENABLED = True
 except OSError as err:
     _analyzer = None
     MODEL_ERROR = str(err)

@@ -100,11 +100,10 @@ def main() -> None:
         "behind the API backend."
     )
 
-    if presidio_module.MODEL_ERROR:
-        st.warning(
-            "spaCy model not found — Presidio PII detection is disabled. "
-            "Install a compatible English model for full PII analysis.\n"
-            f"Error: {presidio_module.MODEL_ERROR}"
+    if not presidio_module.PII_ENABLED:
+        st.info(
+            "Presidio PII detection is currently unavailable. "
+            "Injection risk scoring remains fully operational."
         )
 
     with st.form("prompt_form"):
