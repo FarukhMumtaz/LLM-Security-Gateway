@@ -7,6 +7,8 @@
 [![spaCy](https://img.shields.io/badge/NLP-spaCy-09A3D5?style=for-the-badge&logo=spacy&logoColor=white)](https://spacy.io/)
 [![Presidio](https://img.shields.io/badge/Security-Presidio-0078D4?style=for-the-badge&logo=microsoft&logoColor=white)](https://microsoft.github.io/presidio/)
 
+**Live App :**https://llm-security-gate.streamlit.app/
+
 A complete security gateway for LLM applications with:
 - **Backend**: FastAPI-based prompt analysis pipeline
 - **Frontend**: Modern React UI for interactive testing and batch analysis
@@ -419,4 +421,4 @@ For issues or questions:
 
 **Version**: 1.0.0
 
-**Last Updated**: 2024
+**Last Updated**: 2026
