@@ -1,0 +1,136 @@
+/* ─── Google Fonts (must come before @tailwindcss) ─────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Decision colors */
+  --allow:  #10b981;   /* emerald-500 */
+  --mask:   #f59e0b;   /* amber-500  */
+  --block:  #f43f5e;   /* rose-500   */
+
+  /* Gauge gradient stops */
+  --gauge-low:    #10b981;
+  --gauge-mid:    #f59e0b;
+  --gauge-high:   #f43f5e;
+}
+
+/* ─── Base reset ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #0f1117;
+  color: #e2e8f0;
+  margin: 0;
+  min-height: 100vh;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #1e2130; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ─── Keyframes ─────────────────────────────────────────────────────────────── */
+
+/* Pulsing dot for health status */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  50%       { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+.animate-pulse-dot-red {
+  animation: pulse-dot-red 2s ease-in-out infinite;
+}
+@keyframes pulse-dot-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+  50%       { box-shadow: 0 0 0 6px rgba(244, 63, 94, 0); }
+}
+
+/* Shimmer skeleton loader */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1e2130 25%, #2a3045 50%, #1e2130 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Toast slide-in */
+@keyframes slide-in-right {
+  from { transform: translateX(110%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slide-out-right {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(110%); opacity: 0; }
+}
+.toast-enter { animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.toast-exit  { animation: slide-out-right 0.3s ease-in forwards; }
+
+/* Gauge fill animation */
+@keyframes gauge-fill {
+  from { width: 0%; }
+}
+.gauge-bar {
+  animation: gauge-fill 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Badge pop */
+@keyframes badge-pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.06); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.badge-pop { animation: badge-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+/* Results fade-up */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.4s ease-out forwards; }
+
+/* Spin for loading */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin 1s linear infinite; }
+
+/* ─── Utility classes (supplements Tailwind) ─────────────────────────────────── */
+.glass {
+  background: rgba(30, 33, 48, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); }
+.glow-amber   { box-shadow: 0 0 20px rgba(245, 158, 11, 0.25); }
+.glow-rose    { box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);  }
+
+.text-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

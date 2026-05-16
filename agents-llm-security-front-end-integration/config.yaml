@@ -1,0 +1,42 @@
+# ─────────────────────────────────────────────
+# LLM Security Gateway — Configuration
+# ─────────────────────────────────────────────
+
+injection:
+  threshold: 0.48         # block if score >= this value (tuned with evaluate.py)
+  soft_threshold: 0.33   # with phrase hit, block when score is just under main threshold
+  weights:
+    keyword:    0.38      # w1 — phrase / channel matches
+    pattern:    0.32      # w2 — structural regex signals
+    sysextract: 0.22      # w3 — exfiltration wording
+    encoding:   0.08      # w4 — encoded payloads
+
+presidio:
+  language: en
+  score_threshold: 0.4    # minimum confidence to report an entity
+  context_window: 5       # token window for context-aware scoring
+  phone_context_boost: 0.25
+  calibrate_api_key: 1.02   # confidence calibration (API_KEY)
+  calibrate_custom_entities: 1.03
+
+policy:
+  mask_entities:
+    - EMAIL_ADDRESS
+    - PHONE_NUMBER
+    - PERSON
+    - LOCATION
+    - DATE_TIME
+    - NRP
+    - API_KEY
+    - EMPLOYEE_ID
+    - PII_COMPOSITE
+    - CREDIT_CARD
+    - IBAN_CODE
+    - IP_ADDRESS
+    - US_SSN
+
+logging:
+  log_file: gateway_audit.log
+  log_blocked: true
+  log_masked: true
+  log_allowed: false
