@@ -199,13 +199,22 @@ def _build_analyzer() -> AnalyzerEngine:
 
 
 # ── Initialize engines once at import time ───────────────────────────────────
-_analyzer   = _build_analyzer()
+_analyzer: Optional[AnalyzerEngine] = None
+MODEL_ERROR: Optional[str] = None
+try:
+    _analyzer = _build_analyzer()
+except OSError as err:
+    _analyzer = None
+    MODEL_ERROR = str(err)
 _anonymizer = AnonymizerEngine()
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 def analyze(text: str) -> List[RecognizerResult]:
     """Detect PII entities. Returns results including composite flag."""
+    if _analyzer is None:
+        return []
+
     results = _analyzer.analyze(
         text=text,
         language=_LANG,
